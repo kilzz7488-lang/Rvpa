@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WATES CRASHER DASHBOARD</title>
+    <style>
+        /* CSS RAPIH - BIRU SNOW BERGERAK */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a1a2f;  /* Biru tua sebagai base */
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 40px 15px;
+            overflow-x: hidden;
+            -webkit-user-select: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* ANIMASI BIRU SNOW BERGERAK (RINGAN) */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 30%, rgba(176, 224, 255, 0.15) 0%, transparent 30%),
+                        radial-gradient(circle at 70% 80%, rgba(176, 224, 255, 0.1) 0%, transparent 35%),
+                        radial-gradient(circle at 10% 90%, rgba(176, 224, 255, 0.1) 0%, transparent 30%),
+                        radial-gradient(circle at 90% 20%, rgba(176, 224, 255, 0.1) 0%, transparent 35%);
+            animation: snowDrift 25s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Efek tambahan - titik-titik salju halus */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle, rgba(176, 224, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: snowFall 40s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        @keyframes snowDrift {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translate(5%, 5%) rotate(2deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-5%, -5%) rotate(-2deg);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes snowFall {
+            0% {
+                background-position: 0 0, 0 0, 0 0;
+            }
+            100% {
+                background-position: 100px 100px, 50px 50px, 200px 200px;
+            }
+        }
+
+        /* BANNER ATAS - PAKE GARUDA.JPG */
+        .banner {
+            width: 100%;
+            max-width: 480px;
+            height: 180px;
+            background: linear-gradient(rgba(10, 26, 47, 0.7), rgba(10, 26, 47, 0.9)), 
+                        url('garuda.jpg');  /* UBAH DARI wates.jpg JADI garuda.jpg */
+            background-size: cover;
+            background-position: center;
+            border: 2px solid #b0e0ff;  /* Biru snow */
+            border-radius: 20px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            box-shadow: 0 0 25px rgba(176, 224, 255, 0.4);  /* Biru snow glow */
+            margin: 0 auto 25px auto;
+            padding-bottom: 15px;
+            position: relative;
+        }
+
+        .vxz-title {
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: 8px;
+            color: #fff;
+            text-shadow: 0 0 15px #b0e0ff, 0 0 5px #fff;  /* Biru snow */
+            text-align: center;
+            width: 100%;
+        }
+
+        /* FORM WRAPPER */
+        .form-wrapper {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* ===== FITUR BARU: 2 TOMBOL BUG ===== */
+        .bug-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .bug-btn {
+            flex: 1;
+            background: rgba(10, 26, 47, 0.8);
+            border: 2px solid #b0e0ff;
+            color: #b0e0ff;
+            padding: 12px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .bug-btn.active {
+            background: #b0e0ff;
+            color: #0a1a2f;
+            box-shadow: 0 0 20px rgba(176, 224, 255, 0.5);
+        }
+
+        /* INPUT GROUP (TETAP SAMA) */
+        .input-group {
+            background: rgba(10, 26, 47, 0.8);
+            border: 1px solid #b0e0ff;  /* Biru snow */
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: left;
+            transition: 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .input-group:focus-within {
+            border-color: #b0e0ff;
+            box-shadow: 0 0 15px rgba(176, 224, 255, 0.3);
+        }
+
+        label {
+            display: block;
+            font-size: 10px;
+            color: #b0e0ff;  /* Biru snow */
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            font-weight: bold;
+        }
+
+        select option {
+            background: #0a1a2f;
+            color: #b0e0ff;  /* Biru snow */
+        }
+
+        /* TOMBOL SEND BUG (TETAP SAMA) */
+        .btn-send {
+            background: linear-gradient(45deg, #0a1a2f, #b0e0ff);
+            color: #0a1a2f;
+            border: 2px solid #b0e0ff;
+            width: 100%;
+            max-width: 480px;
+            margin: 10px auto 0 auto;
+            display: block;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(176, 224, 255, 0.4);
+            transition: 0.2s;
+        }
+
+        .btn-send:active {
+            transform: scale(0.98);
+            filter: brightness(1.2);
+        }
+
+        .btn-send:hover {
+            box-shadow: 0 5px 30px rgba(176, 224, 255, 0.6);
+        }
+
+        /* FOOTER */
+        .footer {
+            margin-top: 40px;
+            font-size: 10px;
+            color: #b0e0ff;  /* Biru snow */
+            letter-spacing: 5px;
+            text-align: center;
+            width: 100%;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.8;
+        }
+
+        /* OVERLAY LOADING - BIRU SNOW */
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: rgba(10, 26, 47, 0.98);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-container {
+            width: 80%;
+            max-width: 400px;
+            border: 3px solid #b0e0ff;  /* Biru snow */
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(176, 224, 255, 0.5);
+            margin-bottom: 20px;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .loading-text {
+            color: #b0e0ff;  /* Biru snow */
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 5px;
+            margin-top: 20px;
+            text-shadow: 0 0 10px #b0e0ff;
+            animation: blink 1s infinite;
+        }
+
+        .sub-text {
+            color: #b0e0ff;  /* Biru snow */
+            font-size: 14px;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .progress-bar {
+            width: 80%;
+            max-width: 400px;
+            height: 5px;
+            background: #1a2f4a;
+            border-radius: 5px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #b0e0ff;  /* Biru snow */
+            width: 0%;
+            animation: progress 2s linear forwards;
+            box-shadow: 0 0 10px #b0e0ff;
+        }
+
+        @keyframes progress {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- OVERLAY LOADING DENGAN ANIME MP4 -->
+    <div id="overlay">
+        <div class="video-container">
+            <video id="animeVideo" autoplay loop muted playsinline>
+                <source src="anime.mp4" type="video/mp4">
+                <!-- Fallback kalo video ga bisa dimuat -->
+                <img src="https://media.giphy.com/media/3o7abB06u9bNzA8LC8/giphy.gif" alt="Loading..." style="width:100%">
+            </video>
+        </div>
+        <div class="loading-text">PROSES BROOO...</div>
+        <div class="sub-text">MENGIRIM BUG KE TARGET...</div>
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+    </div>
+
+    <!-- BANNER PAKE FOTO GARUDA.JPG -->
+    <div class="banner">
+        <div class="vxz-title">RVPA CRASHER</div>
+    </div>
+
+    <!-- FORM WRAPPER -->
+    <div class="form-wrapper">
+        
+        <!-- ===== 2 TOMBOL BUG BARU ===== -->
+        <div class="bug-toggle">
+            <button class="bug-btn active" id="btnNomor" onclick="setMode('nomor')">📱 BUG NOMOR</button>
+            <button class="bug-btn" id="btnGrup" onclick="setMode('grup')">👥 BUG GRUP</button>
+        </div>
+
+        <!-- INPUT UNTUK NOMOR (DEFAULT) -->
+        <div class="input-group" id="inputNomor">
+            <label>Target Number</label>
+            <input type="number" id="target_num" placeholder="628xxxx" value="">
+        </div>
+
+        <!-- INPUT UNTUK LINK GRUP (HIDDEN DEFAULT) -->
+        <div class="input-group" id="inputGrup" style="display: none;">
+            <label>Link Grup WhatsApp</label>
+            <input type="url" id="target_grup" placeholder="https://chat.whatsapp.com/xxxxxx">
+        </div>
+
+        <div class="input-group">
+            <label>Select Bug </label>
+            <select id="bug_type">
+                <option value="WATES-BLANK-SOLAR">🌞 blank solar</option>
+                <option value="WATES-FORCE-CLOSE-24J">⚡ forclose 24j</option>
+                <option value="WATES-DELAY-PARAH">💀 delay parah</option>
+                <option value="RVPA-CRASHER-PRO">🔥 crasher pro</option>
+            </select>
+        </div>
+    </div>
+
+    <button class="btn-send" onclick="prosesKirim()">🚀 SEND BUG</button>
+
+    <div class="footer">BUILD BY WATES TEAM X RVPA</div>
+
+    <script>
+        // Mode default: nomor
+        var currentMode = 'nomor';
+
+        function setMode(mode) {
+            currentMode = mode;
+            
+            // Update tombol active/inactive
+            document.getElementById('btnNomor').classList.remove('active');
+            document.getElementById('btnGrup').classList.remove('active');
+            
+            if (mode === 'nomor') {
+                document.getElementById('btnNomor').classList.add('active');
+                document.getElementById('inputNomor').style.display = 'block';
+                document.getElementById('inputGrup').style.display = 'none';
+            } else {
+                document.getElementById('btnGrup').classList.add('active');
+                document.getElementById('inputNomor').style.display = 'none';
+                document.getElementById('inputGrup').style.display = 'block';
+            }
+        }
+
+        function prosesKirim() {
+            var bug = document.getElementById('bug_type').value;
+
+            if (currentMode === 'nomor') {
+                // KIRIM KE NOMOR
+                var num = document.getElementById('target_num').value;
+
+                if (num === "") {
+                    alert("Masukan Nomor Target!");
+                    return;
+                }
+
+                if (!num.startsWith('62') && !num.startsWith('08')) {
+                    alert("Nomor harus dimulai dengan 62 atau 08!");
+                    return;
+                }
+
+                document.getElementById('overlay').style.display = 'flex';
+                
+                var video = document.getElementById('animeVideo');
+                if (video) {
+                    video.play().catch(function(error) {
+                        console.log("Video autoplay failed:", error);
+                    });
+                }
+
+                setTimeout(function() {
+                    var wa_number = num;
+                    if (wa_number.startsWith('08')) {
+                        wa_number = '62' + wa_number.substring(1);
+                    } else if (wa_number.startsWith('8')) {
+                        wa_number = '62' + wa_number;
+                    } else if (wa_number.startsWith('+62')) {
+                        wa_number = wa_number.substring(1);
+                    } else if (!wa_number.startsWith('62')) {
+                        wa_number = '62' + wa_number;
+                    }
+
+                    wa_number = wa_number.replace(/\D/g, '');
+                    
+                    // PAKE FORMAT YANG AUTO CHAT DI GB WA
+                    var wa_url = "https://api.whatsapp.com/send/?phone=" + wa_number + "&text=" + encodeURIComponent(bug + " - WOY KAMI NYAWIT BAGI LAHAN LAH😹😹") + "&app_absent=0";
+                    
+                    window.location.href = wa_url;
+                    
+                    setTimeout(function() {
+                        document.getElementById('overlay').style.display = 'none';
+                    }, 500);
+                    
+                }, 2000);
+
+            } else {
+                // KIRIM KE GRUP
+                var grupLink = document.getElementById('target_grup').value;
+
+                if (grupLink === "") {
+                    alert("Masukan Link Grup WhatsApp!");
+                    return;
+                }
+
+                // Validasi link grup
+                if (!grupLink.includes('chat.whatsapp.com')) {
+                    alert("Link harus dari chat.whatsapp.com!");
+                    return;
+                }
+
+                document.getElementById('overlay').style.display = 'flex';
+                
+                var video = document.getElementById('animeVideo');
+                if (video) {
+                    video.play().catch(function(error) {
+                        console.log("Video autoplay failed:", error);
+                    });
+                }
+
+                setTimeout(function() {
+                    // Format untuk kirim ke grup
+                    var wa_url = "https://api.whatsapp.com/send/?phone&text=" + encodeURIComponent(bug + " - WOY KAMI NYAWIT BAGI LAHAN LAH😹😹") + "&app_absent=0";
+                    
+                    window.location.href = wa_url;
+                    
+                    setTimeout(function() {
+                        document.getElementById('overlay').style.display = 'none';
+                    }, 500);
+                    
+                }, 2000);
+            }
+        }
+
+        document.getElementById('animeVideo').addEventListener('error', function() {
+            console.log("Video failed to load, using fallback");
+            this.style.display = 'none';
+            var container = document.querySelector('.video-container');
+            var img = document.createElement('img');
+            img.src = 'https://media.giphy.com/media/3o7abB06u9bNzA8LC8/giphy.gif';
+            img.style.width = '100%';
+            container.appendChild(img);
+        });
+    </script>
+</body>
+  </html>
